@@ -10,5 +10,5 @@ $ cargo run --bin server
 
 - Broadcast wake-on-lan packet
 ```bash
-$ curl -X POST http://localhost:8000/wol?addr=$TARGET_NAC_ADDR
+$ curl -X POST http://localhost:8000/wol?addr=$TARGET_MAC_ADDR
 ```
