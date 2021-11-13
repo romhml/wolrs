@@ -1,24 +1,21 @@
 use mac_address::MacAddress;
 use std::str::FromStr;
-use wolrs::MagicPacket;
+use wolrs::{MagicPacket, Result};
 
-use structopt::StructOpt;
+use clap::Parser;
 
 /// A basic example
-#[derive(StructOpt, Debug)]
-#[structopt(name = "wolrs")]
+#[derive(Parser, Debug)]
+#[clap(version = "1.0.0")]
 struct Opt {
     /// Output file
-    #[structopt()]
+    #[clap()]
     addr: String,
 }
 
-fn main() {
-    let opt = Opt::from_args();
-    match MacAddress::from_str(&opt.addr) {
-        Ok(mac_addr) => {
-            MagicPacket::new(mac_addr).send().unwrap();
-        }
-        Err(_) => panic!("Invalid MAC Address"),
-    }
+fn main() -> Result<()> {
+    let opt = Opt::parse();
+    let mac_addr = MacAddress::from_str(&opt.addr)?;
+    MagicPacket::new(mac_addr).send()?;
+    Ok(())
 }

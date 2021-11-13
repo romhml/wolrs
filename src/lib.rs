@@ -1,5 +1,24 @@
-use mac_address::MacAddress;
+use mac_address::{MacAddress, MacParseError};
 use std::net::{Ipv4Addr, ToSocketAddrs, UdpSocket};
+
+#[derive(Debug)]
+pub enum Error {
+    IO(std::io::Error),
+    Parse(MacParseError),
+}
+pub type Result<T> = std::result::Result<T, Error>;
+
+impl From<std::io::Error> for Error {
+    fn from(error: std::io::Error) -> Self {
+        Error::IO(error)
+    }
+}
+
+impl From<MacParseError> for Error {
+    fn from(error: MacParseError) -> Self {
+        Error::Parse(error)
+    }
+}
 
 /// A Wake-on-LAN magic packet.
 pub struct MagicPacket {
